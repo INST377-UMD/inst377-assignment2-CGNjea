@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Assignment2</title>
+</head>
+<body>
+    <nav>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="stocks.html">Stocks</a></li>
+          <li><a href="dogs.html">Dogs</a></li>
+        </ul>
+    </nav>
+    <h1>Let's look at some stocks!</h1>
+    <input type="text" id="stockTicker" placeholder="Enter stock ticker">
+    <select id="timeRange">
+        <option value="30">30 Days</option>
+        <option value="60">60 Days</option>
+        <option value="90">90 Days</option>
+    </select>
+    <button class="custom-btn" id="lookupStock">Lookup</button>
+    <canvas id="stockChart"></canvas>
+</body>
+</html>
