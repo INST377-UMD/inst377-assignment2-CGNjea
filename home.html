@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment2</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
-    <title>Assignment2</title>
 </head>
 <body>
     <h1>Assignment2 - Jodi A</h1>
@@ -18,17 +18,30 @@
     </nav>
     <h2>Try some of these activities!</h2>
     <div class="buttons">
-        <button class=".myButton"><a href="stocks.html">Stocks</a></button>
-        <button class=".myButton"><a href="dogs.html">Dogs</a></button>
+        <a href="stocks.html" class="myButton">Stocks</a>
+        <a href="dogs.html" class="myButton">Dogs</a>
     </div>
-    <div class="quote">
+    <div id="quote" class="quote">
         <h4>Here is a quote: </h4>
     </div>
     <div class="audio-instructions">
-        <h4>Use the buttons below nto navigate using audio!</h4>
+        <h4>Use the buttons below to navigate using audio!</h4>
         <button id="turnOnAudio">Turn On Audio</button>
         <button id="turnOffAudio">Turn Off Audio</button>
         <p>Voice commands: "hello", "change the color to [color]", "navigate to [page]"</p>
     </div>
+
+    <script src="action.js"></script>
+    <script>
+    fetch('https://api.quotable.io/random')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('quote').innerHTML = `"${data.content}" - ${data.author}`;
+        })
+        .catch(error => {
+        document.getElementById('quote').textContent = "Failed to load quote. Please try again later.";
+        console.error('Error fetching quote:', error);
+        });
+    </script>
 </body>
 </html>

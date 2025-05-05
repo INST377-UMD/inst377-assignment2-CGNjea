@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment2 - Stocks</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Assignment2</title>
 </head>
 <body>
     <nav>
@@ -17,13 +17,134 @@
         </ul>
     </nav>
     <h1>Let's look at some stocks!</h1>
-    <input type="text" id="stockTicker" placeholder="Enter stock ticker">
-    <select id="timeRange">
-        <option value="30">30 Days</option>
-        <option value="60">60 Days</option>
-        <option value="90">90 Days</option>
-    </select>
-    <button class="custom-btn" id="lookupStock">Lookup</button>
-    <canvas id="stockChart"></canvas>
+
+    <div class="stock-form">
+        <label for="stockTicker">Enter Stock Ticker:</label>
+        <input type="text" id="stockTicker" placeholder="e.g. AAPL, GOOGL, MSFT">
+        <label for="timeRange">Select Time Range:</label>
+        <select id="timeRange">
+            <option value="30">30 Days</option>
+            <option value="60">60 Days</option>
+            <option value="90">90 Days</option>
+        </select>
+        <button class="custom-btn" id="lookupStock">Lookup</button>
+    </div>
+
+    <div id="errorMessage" style="color: red; display: none;">Error: Unable to fetch stock data. Please try again.</div>
+    <canvas id="stockChart" width="800" height="400" aria-label="Stock chart showing closing prices over time" role="img"></canvas>
+
+    <h2>Top 5 Stocks on Reddit</h2>
+    <table class="stock-table">
+      <thead>
+        <tr>
+          <th>TICKER</th>
+          <th>COMMENT COUNT</th>
+          <th>SENTIMENT</th>
+        </tr>
+      </thead>
+      <tbody id="stockTableBody">
+        <!-- Will be populated by JavaScript -->
+      </tbody>
+    </table>
+
+    <div class="audio-instructions">
+        <h4>Use the buttons below to navigate using audio!</h4>
+        <button id="turnOnAudio">Turn On Audio</button>
+        <button id="turnOffAudio">Turn Off Audio</button>
+        <p>Voice commands: "hello", "change the color to [color]", "navigate to [page]"</p>
+    </div>
+
+    <script src="action.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let stockChart = null;
+            fetch('https://tradestie.com/api/v1/apps/reddit')
+        .then(response => response.json())
+        .then(data => {
+          const top5 = data.slice(0, 5);
+          const tableBody = document.getElementById('stockTableBody');
+          
+          top5.forEach(stock => {
+            const row = tableBody.insertRow();
+            row.insertCell(0).innerHTML = 
+              `<a href="https://finance.yahoo.com/quote/${stock.ticker}" target="_blank">${stock.ticker}</a>`;
+            row.insertCell(1).textContent = stock.comment_count;
+            const sentimentCell = row.insertCell(2);
+            sentimentCell.innerHTML = stock.sentiment === 'Bullish' ? '🐂 Bullish' : '🐻 Bearish';
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching Reddit stocks:', error);
+        });
+        document.getElementById('lookupStock').addEventListener('click', function() {
+        const ticker = document.getElementById('stockTicker').value.trim();
+        const days = document.getElementById('timeRange').value;
+        
+        if (!ticker) {
+          alert('Please enter a stock ticker');
+          return;
+        }
+        const mockData = generateMockStockData(ticker, days);
+        renderStockChart(mockData);
+        });
+        if (annyang) {
+        annyang.addCommands({
+          'lookup *stock': function(stock) {
+            document.getElementById('stockTicker').value = stock.toUpperCase();
+            document.getElementById('lookupStock').click();
+          }
+        });
+      }
+      
+      function renderStockChart(data) {
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        const dates = data.results.map(item => new Date(item.t).toLocaleDateString());
+        const closes = data.results.map(item => item.c);
+        
+        if (stockChart) {
+          stockChart.destroy();
+        }
+        
+        stockChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: dates,
+            datasets: [{
+              label: `${data.ticker} Closing Price`,
+              data: closes,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false
+              }
+            }
+          }
+        });
+      }
+      function generateMockStockData(ticker, days) {
+        const results = [];
+        const now = Date.now();
+        const msPerDay = 86400000;
+        
+        for (let i = 0; i < days; i++) {
+          const date = new Date(now - (i * msPerDay));
+          results.push({
+            t: date.getTime(),
+            c: Math.random() * 100 + 100 // Random price between 100-200
+          });
+        }
+        
+        return {
+          ticker: ticker,
+          results: results.reverse()
+        };
+      }
+    });
+    </script>
 </body>
 </html>
