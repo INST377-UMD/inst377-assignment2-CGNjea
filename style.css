@@ -1,0 +1,163 @@
+nav {
+    background-color: #333;
+    padding: 1rem;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+}
+
+.audio-instructions {
+    background-color: #f0f0f0;
+    padding: 1rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    border-radius: 8px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.custom-btn {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.custom-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+body{
+    background-color: palegreen;
+    font-family: Arial, sans-serif;
+    transition: background-color 0.5s ease;
+}
+.quote-container {
+    margin: 2rem auto;
+    padding: 1rem;
+    max-width: 600px;
+    border-left: 4px solid #4CAF50;
+    background-color: #f9f9f9;
+}
+.myButton {
+box-shadow: 0px 0px 0px 2px #9fb4f2;
+background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+background-color:#7892c2;
+border-radius:10px;
+border:1px solid #4e6096;
+display:inline-block;
+cursor:pointer;
+color:#ffffff;
+font-family:Arial;
+font-size:19px;
+padding:12px 37px;
+text-decoration:none;
+text-shadow:0px 1px 0px #283966;
+}
+.myButton:hover {
+background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+background-color:#476e9e;
+}
+.myButton:active {
+position:relative;
+top:1px;
+}
+
+.stocks-container {
+    padding: 2rem;
+}
+
+.stock-form {
+    margin-bottom: 2rem;
+}
+
+.stock-form input, .stock-form select {
+    padding: 8px;
+    margin-right: 10px;
+}
+
+#stockChart {
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+}
+
+.stock-table th, .stock-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.stock-table th {
+    background-color: #f2f2f2;
+}
+.dogs-container {
+    padding: 2rem;
+}
+
+.dog-carousel {
+    max-width: 600px;
+    margin: 2rem auto;
+    overflow: hidden;
+}
+
+.dog-carousel img {
+    width: 100%;
+    height: auto;
+    display: none;
+}
+
+.dog-carousel img.active {
+    display: block;
+}
+
+.breed-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 2rem 0;
+}
+
+.breed-info {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    display: none;
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Assignment2 - Dogs</title>
+    <script src="https://cdn.jsdelivr.net/npm/simple-slider@1.0.0/simple-slider.js"></script>
+</head>
+<body>
+    <nav>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="stocks.html">Stocks</a></li>
+          <li><a href="dogs.html">Dogs</a></li>
+        </ul>
+    </nav><br>
+
+    <div class="dogs-container">
+        <h1>Learn a Couple Facts about Dogs!</h1>
+        
+        <div class="dog-carousel" id="dogCarousel">
+          <!-- Images will be loaded here -->
+          <p>Loading dog images...</p>
+        </div>
+        
+        <h2>Dog Breeds</h2>
+        <div class="breed-buttons" id="breedButtons">
+          <!-- Buttons will be loaded here -->
+        </div>
+        
+        <div class="breed-info" id="breedInfo">
+          <!-- Breed info will be displayed here -->
+        </div>
+      </div>
+    
+      <div class="audio-instructions">
+        <h3>Audio Commands</h3>
+        <p>Try saying: "hello", "change the color to [color]", "navigate to [page]", "load dog breed [breed]"</p>
+        <button id="turnOnAudio" class="custom-btn">Turn On Audio</button>
+        <button id="turnOffAudio" class="custom-btn">Turn Off Audio</button>
+      </div>
+    
+      <script src="script.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          // Load random dog images
+          fetch('https://dog.ceo/api/breeds/image/random/10')
+            .then(response => response.json())
+            .then(data => {
+              const carousel = document.getElementById('dogCarousel');
+              carousel.innerHTML = '';
+              
+              let currentIndex = 0;
+              data.message.forEach((imgUrl, index) => {
+                const img = document.createElement('img');
+                img.src = imgUrl;
+                img.alt = 'Random dog';
+                img.style.display = index === 0 ? 'block' : 'none';
+                img.classList.add(index === 0 ? 'active' : '');
+                carousel.appendChild(img);
+              });
+              
+              // Simple carousel functionality
+              setInterval(() => {
+                const images = carousel.querySelectorAll('img');
+                images[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add('active');
+              }, 3000);
+            })
+            .catch(error => {
+              document.getElementById('dogCarousel').textContent = 'Failed to load dog images.';
+            });
+          
+          // Load dog breeds
+          fetch('https://api.thedogapi.com/v1/breeds')
+            .then(response => response.json())
+            .then(data => {
+              const buttonsContainer = document.getElementById('breedButtons');
+              
+              data.forEach(breed => {
+                const btn = document.createElement('button');
+                btn.className = 'custom-btn';
+                btn.textContent = breed.name;
+                btn.addEventListener('click', () => showBreedInfo(breed));
+                buttonsContainer.appendChild(btn);
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching dog breeds:', error);
+            });
+          
+          function showBreedInfo(breed) {
+            const infoDiv = document.getElementById('breedInfo');
+            infoDiv.innerHTML = `
+              <h3>${breed.name}</h3>
+              <p><strong>Temperament:</strong> ${breed.temperament || 'Not available'}</p>
+              <p><strong>Life Span:</strong> ${breed.life_span || 'Not available'}</p>
+              <p><strong>Breed Group:</strong> ${breed.breed_group || 'Not available'}</p>
+              <p><strong>Weight:</strong> ${breed.weight?.metric || 'Not available'} kg</p>
+              <p><strong>Height:</strong> ${breed.height?.metric || 'Not available'} cm</p>
+            `;
+            infoDiv.style.display = 'block';
+          }
+          
+          // Additional audio command for dog breeds
+          if (annyang) {
+            annyang.addCommands({
+              'load dog breed *breed': function(breed) {
+                const buttons = document.querySelectorAll('#breedButtons button');
+                const foundBtn = Array.from(buttons).find(btn => 
+                  btn.textContent.toLowerCase().includes(breed.toLowerCase())
+                );
+                if (foundBtn) foundBtn.click();
+              }
+            });
+          }
+        });
+      </script>
+    </body>
+    </html>
